@@ -12,18 +12,18 @@ public class DirectionsServiceTest {
 	private DirectionsService directionsService;
 
 	@Before
-	public void setUp() throws Exception {
+	public void setUp() {
 		directionsService = new DirectionsService("AIzaSyBzlLYISGjL_ovJwAehh6ydhB56fCCpPQw");
 	}
 
 	@Test
-	public void exampleTest() throws Exception {
+	public void exampleTest() {
 		// Setup
 		Position origin = new Position(-33.5, 151.5);
 		Position destination = new Position(-33.6, 151.6);
 
 		// Execute (this will fail until the service is implemented correctly)
-		// directionsService.getDirections(origin, destination);
+		directionsService.getDirections(origin, destination);
 
 		// Verify
 		assertThat(1 + 2, is(3));

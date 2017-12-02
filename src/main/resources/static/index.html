@@ -116,17 +116,17 @@
                     });
 
 
-//                    var locationRequest = {
-//                        "latitude": this.markers.pickup.position.lat,
-//                        "longitude": this.markers.pickup.position.lng,
-//                    };
-//
-//                    // Call the /geocode endpoint to get the suburb and street address
-//                    Vue.http.post('api/geo/locationInfo', locationRequest).then(function (response) {
-//                        console.log("Pickup info: ", response.data);
-//                    }, function (error) {
-//                        console.log(error.statusText);
-//                    });
+                   var locationRequest = {
+                       "latitude": this.markers.pickup.position.lat,
+                       "longitude": this.markers.pickup.position.lng,
+                   };
+
+                   // Call the /geocode endpoint to get the suburb and street address
+                   Vue.http.post('api/geo/locationInfo', locationRequest).then(function (response) {
+                       console.log("Pickup info: ", response.data);
+                   }, function (error) {
+                       console.log(error.statusText);
+                   });
 
                 }
             }

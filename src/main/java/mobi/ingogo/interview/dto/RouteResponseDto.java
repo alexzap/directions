@@ -4,11 +4,11 @@ package mobi.ingogo.interview.dto;
  * Created by Simon on 27/11/17.
  */
 public class RouteResponseDto {
-	GeoPositionDto pickup;
-	GeoPositionDto dropoff;
-	String encodedPolyline;
-	Double durationInMinutes;
-	Double distanceInKm;
+	private GeoPositionDto pickup;
+	private GeoPositionDto dropoff;
+	private String encodedPolyline;
+	private Double durationInMinutes;
+	private Double distanceInKm;
 
 	public GeoPositionDto getPickup() {
 		return pickup;
