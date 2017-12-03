@@ -23,25 +23,33 @@ public class GeocoderService {
 
         try {
             GeocodeResult geocodeResult = new GeocodeResult();
-            GeocodingApiRequest request = GeocodingApi.newRequest(context)
-                    .latlng(new LatLng(position.getLatitude(), position.getLongitude()));
+            LatLng location = new LatLng(position.getLatitude(), position.getLongitude());
+            GeocodingApiRequest request = GeocodingApi.reverseGeocode(context, location);
             GeocodingResult[] results = request.await();
+            if (results == null || results.length == 0)
+                return geocodeResult;
             geocodeResult.setStreetAddress(results[0].formattedAddress); // best address is in first result
 
             // suburb might not be in the first result so loop over them until we find it
-            for (GeocodingResult result : results) {
-                for (AddressComponent addressComponent :result.addressComponents) {
-                    for (AddressComponentType type : addressComponent.types) {
-                        if (AddressComponentType.LOCALITY.equals(type)) {
-                            geocodeResult.setSuburb(addressComponent.longName);
-                            return geocodeResult;
-                        }
-                    }
-                }
-            }
+            String suburb = getSuburbFromResults(results);
+            geocodeResult.setSuburb(suburb);
+
             return geocodeResult;
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
+    }
+
+    private String getSuburbFromResults(GeocodingResult[] results) {
+        for (GeocodingResult result : results) {
+            for (AddressComponent addressComponent :result.addressComponents) {
+                for (AddressComponentType type : addressComponent.types) {
+                    if (AddressComponentType.LOCALITY.equals(type)) {
+                        return addressComponent.longName;
+                    }
+                }
+            }
+        }
+        return null;
     }
 }
