@@ -3,10 +3,7 @@ package mobi.ingogo.interview.service.geocoder;
 import com.google.maps.GeoApiContext;
 import com.google.maps.GeocodingApi;
 import com.google.maps.GeocodingApiRequest;
-import com.google.maps.model.AddressComponent;
-import com.google.maps.model.AddressComponentType;
-import com.google.maps.model.GeocodingResult;
-import com.google.maps.model.LatLng;
+import com.google.maps.model.*;
 import mobi.ingogo.interview.model.Position;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -28,16 +25,20 @@ public class GeocoderService {
             GeocodeResult geocodeResult = new GeocodeResult();
             GeocodingApiRequest request = GeocodingApi.newRequest(context)
                     .latlng(new LatLng(position.getLatitude(), position.getLongitude()));
-            GeocodingResult result = request.await()[0];
-            geocodeResult.setStreetAddress(result.formattedAddress);
-            for (AddressComponent addressComponent :result.addressComponents) {
-                for (AddressComponentType type : addressComponent.types) {
-                    if (AddressComponentType.LOCALITY.equals(type)) {
-                        geocodeResult.setSuburb(addressComponent.longName);
+            GeocodingResult[] results = request.await();
+            geocodeResult.setStreetAddress(results[0].formattedAddress); // best address is in first result
+
+            // suburb might not be in the first result so loop over them until we find it
+            for (GeocodingResult result : results) {
+                for (AddressComponent addressComponent :result.addressComponents) {
+                    for (AddressComponentType type : addressComponent.types) {
+                        if (AddressComponentType.LOCALITY.equals(type)) {
+                            geocodeResult.setSuburb(addressComponent.longName);
+                            return geocodeResult;
+                        }
                     }
                 }
             }
-
             return geocodeResult;
         } catch (Exception e) {
             throw new RuntimeException(e);
