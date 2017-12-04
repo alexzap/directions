@@ -1,11 +1,21 @@
 package mobi.ingogo.interview.dto;
 
+import javax.persistence.Column;
+import javax.persistence.Embeddable;
+
 /**
  * Created by Simon on 27/11/17.
  */
+
+@Embeddable
 public class GeoPositionDto {
+	@Column(name = "latitude")
 	private String latitude;
+
+	@Column(name = "longitude")
 	private String longitude;
+
+	@Column(name = "accuracy")
 	private int accuracy;
 
 	public String getLatitude() {

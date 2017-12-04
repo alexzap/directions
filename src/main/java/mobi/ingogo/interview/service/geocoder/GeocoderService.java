@@ -4,6 +4,7 @@ import com.google.maps.GeoApiContext;
 import com.google.maps.GeocodingApi;
 import com.google.maps.GeocodingApiRequest;
 import com.google.maps.model.*;
+import mobi.ingogo.interview.dao.IGeopositionDAO;
 import mobi.ingogo.interview.model.Position;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -21,6 +22,9 @@ public class GeocoderService {
         context.setApiKey(apiKey);
     }
 
+    @Autowired
+    private IGeopositionDAO geopositionDAO;
+
     public GeocodeResult reverseGeocode(Position position) {
 
         try {
@@ -36,6 +40,7 @@ public class GeocoderService {
             // suburb might not be in the first result so loop over them until we find it
             String suburb = getSuburbFromResults(results);
             geocodeResult.setSuburb(suburb);
+            geopositionDAO.addGeocodeResult(geocodeResult);
 
             return geocodeResult;
         } catch (Exception e) {

@@ -1,5 +1,6 @@
 package mobi.ingogo.interview.controller;
 
+import mobi.ingogo.interview.dao.IGeopositionDAO;
 import mobi.ingogo.interview.dto.GeoPositionDto;
 import mobi.ingogo.interview.dto.RouteRequestDto;
 import mobi.ingogo.interview.dto.RouteResponseDto;
@@ -28,10 +29,14 @@ public class GeoApiController {
 	@Autowired
 	private GeocoderService geocoderService;
 
+	@Autowired
+	private IGeopositionDAO geopositionDAO;
+
 	private Logger logger = LoggerFactory.getLogger(this.getClass());
 
 	@RequestMapping(value = "/route", method = RequestMethod.POST)
 	public ResponseEntity<RouteResponseDto> route(@RequestBody RouteRequestDto request) {
+		geopositionDAO.addRouteRequest(request);
 
 		Double pickupLatitude = Double.parseDouble(request.getPickup().getLatitude());
 		Double pickupLongitude = Double.parseDouble(request.getPickup().getLongitude());
@@ -43,12 +48,15 @@ public class GeoApiController {
 		DirectionsResponse directionsResponse = directionsService.getDirections(origin, destination);
 
 		RouteResponseDto response = new RouteResponseDto();
+		response.setPickup(request.getPickup());
+		response.setDropoff(request.getDropoff());
 		logger.info("Encoded Polyline: " + directionsResponse.getEncodedPolyline().getEncodedPath());
 		response.setEncodedPolyline(directionsResponse.getEncodedPolyline().getEncodedPath());
 		logger.info("Distance: " + directionsResponse.getDistance().humanReadable);
 		response.setDistance(directionsResponse.getDistance().humanReadable);
 		logger.info("Duration: " + directionsResponse.getDuration().humanReadable);
 		response.setDuration(directionsResponse.getDuration().humanReadable);
+		geopositionDAO.addRouteResponse(response);
 
 		return new ResponseEntity<>(response, HttpStatus.OK);
 	}

@@ -1,7 +1,21 @@
 package mobi.ingogo.interview.service.geocoder;
 
-public class GeocodeResult {
+import javax.persistence.*;
+import java.io.Serializable;
+
+@Entity
+@Table(name="geocode_result")
+public class GeocodeResult implements Serializable {
+
+    @Id
+    @GeneratedValue(strategy= GenerationType.AUTO)
+    @Column(name="geocode_result_id")
+    private Integer geocodeResultId;
+
+    @Column(name="suburb")
     private String suburb;
+
+    @Column(name="street_address")
     private String streetAddress;
 
     public String getStreetAddress() {
@@ -18,5 +32,13 @@ public class GeocodeResult {
 
     public void setSuburb(String suburb) {
         this.suburb = suburb;
+    }
+
+    public Integer getGeocodeResultId() {
+        return geocodeResultId;
+    }
+
+    public void setGeocodeResultId(Integer geocodeResultId) {
+        this.geocodeResultId = geocodeResultId;
     }
 }
