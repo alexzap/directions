@@ -41,15 +41,14 @@ public class GeoApiController {
 		Position origin = new Position(pickupLatitude,pickupLongitude);
 		Position destination = new Position(destinationLatitude,destinationLongitude);
 		DirectionsResponse directionsResponse = directionsService.getDirections(origin, destination);
-		geocoderService.reverseGeocode(origin);
 
 		RouteResponseDto response = new RouteResponseDto();
 		logger.info("Encoded Polyline: " + directionsResponse.getEncodedPolyline().getEncodedPath());
 		response.setEncodedPolyline(directionsResponse.getEncodedPolyline().getEncodedPath());
-		logger.info("Distance in km: " + ((Long)directionsResponse.getDistance().inMeters).doubleValue() / 1000);
-		response.setDistanceInKm(((Long)directionsResponse.getDistance().inMeters).doubleValue() / 1000);
-		logger.info("Duration in minutes: " + ((Long)directionsResponse.getDuration().inSeconds).doubleValue() / 60);
-		response.setDurationInMinutes(((Long)directionsResponse.getDuration().inSeconds).doubleValue() / 60);
+		logger.info("Distance: " + directionsResponse.getDistance().humanReadable);
+		response.setDistance(directionsResponse.getDistance().humanReadable);
+		logger.info("Duration: " + directionsResponse.getDuration().humanReadable);
+		response.setDuration(directionsResponse.getDuration().humanReadable);
 
 		return new ResponseEntity<>(response, HttpStatus.OK);
 	}

@@ -7,8 +7,8 @@ public class RouteResponseDto {
 	private GeoPositionDto pickup;
 	private GeoPositionDto dropoff;
 	private String encodedPolyline;
-	private Double durationInMinutes;
-	private Double distanceInKm;
+	private String duration;
+	private String distance;
 
 	public GeoPositionDto getPickup() {
 		return pickup;
@@ -34,19 +34,19 @@ public class RouteResponseDto {
 		this.encodedPolyline = encodedPolyline;
 	}
 
-	public Double getDurationInMinutes() {
-		return durationInMinutes;
+	public String getDuration() {
+		return duration;
 	}
 
-	public void setDurationInMinutes(Double durationInMinutes) {
-		this.durationInMinutes = durationInMinutes;
+	public void setDuration(String duration) {
+		this.duration = duration;
 	}
 
-	public Double getDistanceInKm() {
-		return distanceInKm;
+	public String getDistance() {
+		return distance;
 	}
 
-	public void setDistanceInKm(Double distanceInKm) {
-		this.distanceInKm = distanceInKm;
+	public void setDistance(String distance) {
+		this.distance = distance;
 	}
 }

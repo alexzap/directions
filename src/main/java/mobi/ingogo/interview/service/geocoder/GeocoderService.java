@@ -9,6 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
+import java.util.Arrays;
+
 @Component
 public class GeocoderService {
 
@@ -28,7 +30,8 @@ public class GeocoderService {
             GeocodingResult[] results = request.await();
             if (results == null || results.length == 0)
                 return geocodeResult;
-            geocodeResult.setStreetAddress(results[0].formattedAddress); // best address is in first result
+            geocodeResult.setStreetAddress(getStreetAddressFromResults(results));
+//            geocodeResult.setStreetAddress(results[0].formattedAddress); // best address is in first result
 
             // suburb might not be in the first result so loop over them until we find it
             String suburb = getSuburbFromResults(results);
@@ -38,6 +41,22 @@ public class GeocoderService {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
+    }
+
+    private String getStreetAddressFromResults(GeocodingResult[] results) {
+        String streetNumber = null;
+        for (GeocodingResult result : results) {
+            for (AddressComponent component : result.addressComponents) {
+                if (Arrays.stream(component.types).anyMatch(type -> type.equals(AddressComponentType.STREET_NUMBER))) {
+                    streetNumber = component.longName;
+                }
+                if (Arrays.stream(component.types).anyMatch(type -> type.equals(AddressComponentType.ROUTE))) {
+                    String route = component.longName;
+                    return streetNumber != null ? streetNumber + " " + route : route; // as long as there is a route we have a street address
+                }
+            }
+        }
+        return null;
     }
 
     private String getSuburbFromResults(GeocodingResult[] results) {

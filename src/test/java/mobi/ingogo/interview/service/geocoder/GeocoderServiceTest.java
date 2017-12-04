@@ -20,7 +20,7 @@ public class GeocoderServiceTest {
         Position position = new Position(-33.864933, 151.204426);
         GeocodeResult result = geocoderService.reverseGeocode(position);
         assertThat(result.getSuburb(), is("Sydney"));
-        assertThat(result.getStreetAddress(), is("55 Clarence St, Sydney NSW 2000, Australia"));
+        assertThat(result.getStreetAddress(), is("55 Clarence Street"));
 
     }
 
@@ -29,7 +29,7 @@ public class GeocoderServiceTest {
         Position position = new Position(-33.81291023, 151.1759779);
         GeocodeResult result = geocoderService.reverseGeocode(position);
         assertThat(result.getSuburb(), is("Artarmon"));
-        assertThat(result.getStreetAddress(), is("Sydney Orbital Network & Pacific Hwy & M2 & Lane Cove Tunnel, New South Wales, Australia"));
+        assertThat(result.getStreetAddress(), is("Sydney Orbital Network"));
     }
 
     @Test
@@ -37,7 +37,7 @@ public class GeocoderServiceTest {
         Position position = new Position(-27.45898348, 153.01174678);
         GeocodeResult result = geocoderService.reverseGeocode(position);
         assertThat(result.getSuburb(), is("Red Hill"));
-        assertThat(result.getStreetAddress(), is("Musgrave Rd & M3 & Hale St & State Route 31, Queensland, Australia"));
+        assertThat(result.getStreetAddress(), is("Musgrave Road"));
     }
 
     @Test
@@ -45,7 +45,7 @@ public class GeocoderServiceTest {
         Position position = new Position(-37.73281596, 144.90839894);
         GeocodeResult result = geocoderService.reverseGeocode(position);
         assertThat(result.getSuburb(), is("Essendon Fields"));
-        assertThat(result.getStreetAddress(), is("120 Bulla Rd, Essendon Fields VIC 3041, Australia"));
+        assertThat(result.getStreetAddress(), is("120 Bulla Road"));
     }
 
     @Test
@@ -53,7 +53,7 @@ public class GeocoderServiceTest {
         Position position = new Position(-27.48449974, 153.0342487);
         GeocodeResult result = geocoderService.reverseGeocode(position);
         assertThat(result.getSuburb(), is("Woolloongabba"));
-        assertThat(result.getStreetAddress(), is("Vulture St & State Route 41 & Pacific Mwy & M3, Queensland, Australia"));
+        assertThat(result.getStreetAddress(), is("Vulture Street"));
     }
 
 }

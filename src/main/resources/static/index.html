@@ -26,6 +26,15 @@
                          :options="{geodesic:true, strokeColor:'#FF0000'}"
                          @path_changed="updatePolylinePath($event)">
         </google-polyline>
+        <google-infowindow :position="markers.pickup.position">
+            {{streetAddress}} <br>
+            {{suburb}}
+        </google-infowindow>
+
+        <google-infowindow :position="markers.dropoff.position">
+            {{distance}} <br>
+            {{duration}}
+        </google-infowindow>
 
     </google-map>
 </div>
@@ -53,6 +62,10 @@
         var vue = new Vue({
             el: '#root',
             data: {
+                streetAddress:'',
+                suburb:'',
+                distance:'',
+                duration:'',
                 place: '',
                 destination: {},
                 routePath: [],
@@ -110,6 +123,8 @@
                     // Call the /route endpoint to get the encoded polyline route, distance and time
                     Vue.http.post('api/geo/route', routeRequest).then(function (response) {
                         model.routePath = decodePath(response.data.encodedPolyline);
+                        model.distance = "Distance: " + response.data.distance;
+                        model.duration = "Duration: " + response.data.duration;
                         console.log("Route info: ", response.data);
                     }, function (error) {
                         console.log(error.statusText);
@@ -123,6 +138,8 @@
 
                    // Call the /geocode endpoint to get the suburb and street address
                    Vue.http.post('api/geo/locationInfo', locationRequest).then(function (response) {
+                       model.streetAddress = response.data.streetAddress;
+                       model.suburb = response.data.suburb;
                        console.log("Pickup info: ", response.data);
                    }, function (error) {
                        console.log(error.statusText);
